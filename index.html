@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>배주형 | Security Portfolio</title>
+    <!-- 1. Pretendard 폰트 적용 -->
+    <link rel="stylesheet" as="style" crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+    <!-- 1. JetBrains Mono 폰트 CDN 추가 -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #fcfbf9;
+            --surface: #ffffff;
+            --surface-alt: #f7f5f0;
+            --border-color: #e6e2db;
+            --border-hover: #c8c0b4;
+            --text-main: #1f1b18;
+            --text-sub: #59524c;
+            --text-muted: #635a52;
+            
+            /* Pastel Accents */
+            --accent-blue-bg: #f0f9ff;
+            --accent-blue-text: #0369a1;
+            --accent-mint-bg: #f0fdf4;
+            --accent-mint-text: #0f766e;
+            --accent-lavender-bg: #faf5ff;
+            --accent-lavender-text: #7e22ce;
+
+            /* Dark Theme Accent Variables */
+            --accent-blue-dark: #38bdf8;
+            --accent-mint-dark: #34d399;
+            
+            --radius: 8px;
+            --shadow-sm: 0 2px 8px rgba(31, 27, 24, 0.02);
+            --shadow-md: 0 4px 20px rgba(31, 27, 24, 0.04);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            /* 가로 쏠림 방지 안전장치 추가 */
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        code, .mono-text, .info-pill {
+            font-family: 'JetBrains Mono', SFMono-Regular, Consolas, Monaco, monospace;
+        }
+
+        /* code/mono-text 줄바꿈 안전장치 */
+        code, .mono-text {
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .portfolio-wrapper {
+            width: 100%;
+            max-width: 1000px; 
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+
+        h1.logo {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            margin: 0;
+        }
+
+        .logo a {
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.25rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .nav-links a {
+            color: var(--text-sub);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a:focus-visible {
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .nav-links a:focus-visible,
+        .strength-card:focus-visible,
+        .project-bridge:focus-visible,
+        .meta-toggle-btn:focus-visible {
+            outline: 3px solid var(--accent-blue-text);
+            outline-offset: 3px;
+        }
+
+        section {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.75rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .section-tag {
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+            display: block;
+        }
+
+        h2.section-title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: var(--text-sub);
+            margin-bottom: 0.85rem;
+        }
+
+        .hero-section {
+            background-color: #161412;
+            color: #fcfbf9;
+            border: 1px solid #2a2522;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 2.25rem 2.25rem;
+        }
+
+        .hero-section .section-tag {
+            color: #a89f91;
+        }
+
+        .hero-main-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            line-height: 1.45;
+            color: #ffffff;
+            letter-spacing: -0.03em;
+            background-color: #221e1a;
+            border: 1px solid #332d27;
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius);
+            margin: 0; /* h2 기본 마진 초기화 */
+        }
+
+        .strength-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.85rem;
+        }
+
+        .strength-card {
+            background-color: #221e1a;
+            border: 1px solid #332d27;
+            border-radius: var(--radius);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .strength-card:hover {
+            border-color: #574c43;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .strength-card.card-blue { background-color: #13222f; border-color: #1d4ed8; }
+        .strength-card.card-mint { background-color: #112922; border-color: #047857; }
+        .strength-card.card-lavender { background-color: #261738; border-color: #7e22ce; }
+
+        .strength-card .card-num {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #a89f91;
+            margin-bottom: 0.25rem;
+            letter-spacing: 0.08em;
+        }
+
+        .strength-card h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.02em;
+        }
+
+        .strength-card p {
+            font-size: 0.85rem;
+            color: #d1c7bc;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .card-link-hint {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .evidence-badge-box {
+            background-color: #221e1a;
+            border: 1px solid #332d27;
+            padding: 0.65rem 1rem;
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+            color: #d1c7bc;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .evidence-badge-box strong {
+            color: #ffffff;
+        }
+
+        .content-box {
+            background-color: var(--surface-alt);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            margin-top: 0.85rem;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+        }
+
+        .sub-title {
+            font-size: 1.02rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.02em;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .info-pill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+            margin-top: 0.6rem;
+        }
+
+        .info-pill {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 0.35rem 0.65rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-sub);
+        }
+
+        .pipeline-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-top: 0.85rem;
+        }
+
+        .pipeline-step {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .pipeline-arrow {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .core-message {
+            margin-top: 1.15rem;
+            padding: 1rem 1.15rem;
+            background-color: var(--surface);
+            border-left: 4px solid var(--text-main);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .project-bridge {
+            margin-top: 1.15rem;
+            padding: 1.15rem;
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .project-bridge:hover {
+            border-color: var(--border-hover);
+            background-color: var(--surface-alt);
+        }
+
+        .bridge-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-main);
+            overflow-wrap: break-word;
+        }
+
+        .bridge-action {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-blue-text);
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            white-space: nowrap;
+        }
+
+        .text-stack-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .grid-3-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.85rem;
+            font-size: 0.92rem;
+        }
+
+        .grid-3-card-item {
+            background: var(--surface);
+            padding: 0.85rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            color: var(--text-sub);
+        }
+
+        .grid-3-card-item strong {
+            color: var(--text-main);
+        }
+
+        .tier-3-section {
+            background-color: var(--surface-alt);
+            border: none;
+            box-shadow: none;
+            padding: 1.75rem 2rem;
+            border-radius: var(--radius);
+        }
+
+        .ts-steps {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .ts-step-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.85rem;
+            text-align: center;
+        }
+
+        .ts-step-card .ts-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent-blue-text);
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ts-step-card .ts-text {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            font-weight: 600;
+        }
+
+        .disclosure-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 0.85rem;
+        }
+
+        .disclosure-box {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.15rem;
+        }
+
+        .disclosure-box h3 {
+            font-size: 0.98rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .disclosure-box.public h3 { color: var(--accent-mint-text); }
+        .disclosure-box.private h3 { color: #b91c1c; }
+
+        .disclosure-box ul {
+            padding-left: 1.1rem;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .meta-toggle-container {
+            background-color: var(--surface-alt);
+            border: none;
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+            box-shadow: none;
+        }
+
+        .meta-toggle-btn {
+            width: 100%;
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 0.92rem;
+            font-weight: 700;
+            padding: 0.95rem 1.15rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .meta-toggle-btn:hover {
+            background-color: #eeeae3;
+            border-color: var(--border-hover);
+        }
+
+        .meta-content-panel {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+            opacity: 0;
+        }
+
+        .meta-content-panel.expanded {
+            max-height: 1200px;
+            opacity: 1;
+            transition: max-height 0.4s ease-in, opacity 0.3s ease-in;
+            margin-top: 1rem;
+        }
+
+        .meta-inner-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.15rem;
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.15rem;
+        }
+
+        .meta-block {
+            min-width: 0;
+        }
+
+        .meta-block h4 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.4rem;
+        }
+
+        .meta-block ul {
+            padding-left: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .meta-block a, .meta-block li {
+            overflow-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .grid-2 > *, .grid-3-cards > *, .disclosure-grid > *, .pipeline-flow > * {
+            min-width: 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.25rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 1024px) {
+            .strength-cards-grid,
+            .grid-2,
+            .ts-steps,
+            .grid-3-cards,
+            .disclosure-grid {
+                grid-template-columns: 1fr;
+            }
+            .project-bridge {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            section, .hero-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portfolio-wrapper">
+        
+        <!-- HEADER -->
+        <header>
+            <h1 class="logo"><a href="#">BAE JOOHYUNG</a></h1>
+            <nav class="nav-links" aria-label="메인 네비게이션">
+                <a href="#focus">01 FOCUS</a>
+                <a href="#system">02 SYSTEM</a>
+                <a href="#communication">03 COMM</a>
+                <a href="#project">04 PROJECT</a>
+                <a href="#troubleshooting">05 TS</a>
+                <a href="#disclosure">06 INFO</a>
+            </nav>
+        </header>
+
+        <!-- TIER 1: HERO SECTION (웹 접근성 준수: h2로 헤딩 구조 정합성 확보) -->
+        <section class="hero-section" role="region" aria-label="메인 오프닝">
+            <div>
+                <span class="section-tag">VALUE & DIRECTION</span>
+                <h2 class="hero-main-text">
+                    문제를 집중해서 분석하고, 시스템의 흐름을 이해하며 해결 과정을 공유하는 사람입니다.
+                </h2>
+            </div>
+
+            <div class="strength-cards-grid">
+                <a href="#focus" class="strength-card card-blue">
+                    <div>
+                        <div class="card-num">01 / FOCUS</div>
+                        <h3>집중력</h3>
+                        <p><code class="mono-text">SecuriCare</code> 로그 매핑 트러블슈팅 등 단계적 원인 분석 경험</p>
+                    </div>
+                    <div class="card-link-hint">상세 내용 보기 →</div>
+                </a>
+
+                <a href="#system" class="strength-card card-mint">
+                    <div>
+                        <div class="card-num">02 / SYSTEM</div>
+                        <h3>시스템 친화</h3>
+                        <p><code class="mono-text">VirtualBox, GNS3, ELK Stack</code> 및 <code class="mono-text">Wazuh</code> 환경 구축 경험</p>
+                    </div>
+                    <div class="card-link-hint">상세 내용 보기 →</div>
+                </a>
+
+                <a href="#communication" class="strength-card card-lavender">
+                    <div>
+                        <div class="card-num">03 / COMM</div>
+                        <h3>의사소통</h3>
+                        <p>프로젝트 취약점 정리 표준화 및 V-파트너 자원봉사단 부팀장 활동</p>
+                    </div>
+                    <div class="card-link-hint">상세 내용 보기 →</div>
+                </a>
+            </div>
+
+            <div class="evidence-badge-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" 
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-mint-dark); flex-shrink: 0;">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                <div><strong>공개 가능한 근거:</strong> 교육과정 및 프로젝트 수행 경험</div>
+            </div>
+        </section>
+
+        <!-- TIER 2: 01 / FOCUS -->
+        <section id="focus" role="region" aria-label="첫 번째 영역: 집중력">
+            <span class="section-tag">01 / FOCUS</span>
+            <h2 class="section-title">집중력</h2>
+            
+            <p><strong>핵심 의미:</strong> 문제를 그냥 지나치지 않고 현상을 확인하며 가능한 원인을 단계적으로 좁혀간다.</p>
+
+            <div class="content-box">
+                <h3 class="sub-title">[대표 근거] <code class="mono-text">SecuriCare</code> 로그 매핑 트러블슈팅 개요</h3>
+                <div class="text-stack-list">
+                    <div><strong>• 문제:</strong> <code class="mono-text">Suricata</code>와 WAF에서 수집된 보안 로그가 <code class="mono-text">Elasticsearch</code>로 전달되었지만 <code class="mono-text">Kibana</code>에서 특정 필드가 누락됨.</div>
+                    <div><strong>• 분석:</strong> <code class="mono-text">Elasticsearch</code> 인덱스 구조와 로그 필드를 단계적으로 비교·분석.</div>
+                    <div><strong>• 원인:</strong> 로그 데이터 타입과 <code class="mono-text">Elasticsearch Mapping</code> 간 충돌이 발생함.</div>
+                    <div><strong>• 해결:</strong> <code class="mono-text">Filebeat</code> 설정과 로그 수집 <code class="mono-text">Pipeline</code>을 수정하고 데이터 구조를 재정의함.</div>
+                    <div><strong>• 결과:</strong> 새 인덱스에서 로그가 정상적으로 수집되고 <code class="mono-text">Kibana</code> 대시보드 시각화가 복구됨.</div>
+                </div>
+            </div>
+
+            <div class="core-message">
+                "문제를 그냥 지나치지 않고 현상을 확인하며 가능한 원인을 단계적으로 좁혀간다."
+            </div>
+        </section>
+
+        <!-- TIER 2: 02 / SYSTEM (결과 문장 보완 완료) -->
+        <section id="system" role="region" aria-label="두 번째 영역: 시스템 친화">
+            <span class="section-tag">02 / SYSTEM</span>
+            <h2 class="section-title">시스템 친화</h2>
+            
+            <p><strong>핵심 의미:</strong> 새로운 환경을 직접 구성하며 시스템의 구조와 데이터 흐름을 이해합니다.</p>
+
+            <div style="background-color: var(--surface-alt); border: 1px solid var(--border-color); padding: 0.85rem 1.15rem; border-radius: var(--radius); font-size: 0.95rem; margin-bottom: 0.85rem;">
+                <strong>구축 배경:</strong> 실제 보안 관제 및 로그 분석 실무 환경에 대비하기 위해, 가상 네트워크(<code class="mono-text">GNS3</code>)와 SIEM(<code class="mono-text">Wazuh·ELK</code>) 인프라를 직접 설계하고 구축했습니다.<br>
+                <strong style="color: var(--accent-mint-text); display: inline-block; margin-top: 0.4rem;">• 결과: 가상 네트워크와 SIEM 간의 안정적인 데이터 파이프라인 연동 검증 완료</strong>
+            </div>
+
+            <div class="grid-2">
+                <div class="content-box" style="margin-top: 0;">
+                    <h3 class="sub-title">경험 기술 및 환경</h3>
+                    <div class="info-pill-list">
+                        <span class="info-pill">VirtualBox</span>
+                        <span class="info-pill">GNS3</span>
+                        <span class="info-pill">Wireshark</span>
+                        <span class="info-pill">Wazuh</span>
+                        <span class="info-pill">ELK Stack</span>
+                        <span class="info-pill">Snort</span>
+                        <span class="info-pill">Suricata</span>
+                        <span class="info-pill">ModSecurity</span>
+                    </div>
+                </div>
+
+                <div class="content-box" style="margin-top: 0;">
+                    <h3 class="sub-title">시스템 흐름 파악</h3>
+                    <div class="pipeline-flow">
+                        <div class="pipeline-step"><code class="mono-text">VirtualBox / GNS3</code></div>
+                        <div class="pipeline-arrow">↓</div>
+                        <div class="pipeline-step"><code class="mono-text">Wazuh / Filebeat / Logstash</code></div>
+                        <div class="pipeline-arrow">↓</div>
+                        <div class="pipeline-step"><code class="mono-text">Elasticsearch</code></div>
+                        <div class="pipeline-arrow">↓</div>
+                        <div class="pipeline-step"><code class="mono-text">Kibana</code></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="core-message">
+                "새로운 환경을 직접 구성하며 시스템의 구조와 데이터 흐름을 이해한다."
+            </div>
+        </section>
+
+        <!-- TIER 2: 03 / COMMUNICATION -->
+        <section id="communication" role="region" aria-label="세 번째 영역: 의사소통">
+            <span class="section-tag">03 / COMMUNICATION</span>
+            <h2 class="section-title">의사소통</h2>
+            
+            <p><strong>핵심 의미:</strong> 분석한 내용을 혼자 가지고 있지 않고 기록과 공유를 통해 팀의 정보로 만듭니다.</p>
+
+            <div class="grid-2" style="margin-top: 0.85rem;">
+                <div class="content-box" style="margin-top: 0;">
+                    <h3 class="sub-title">프로젝트 협업 경험</h3>
+                    <p style="font-size: 0.92rem; margin-bottom: 0.4rem;">• 모의해킹 프로젝트에서 팀원마다 취약점 정리 방식이 달랐던 상황 경험</p>
+                    <p style="font-size: 0.92rem; margin-bottom: 0.4rem;">• 중요도와 영향도를 기준으로 정리 기준을 통일하고 공유</p>
+                    <p style="font-size: 0.88rem; color: var(--accent-blue-text); font-weight: 700;">➔ 결과: 정보 혼선을 줄이고 결과물을 효율적으로 관리</p>
+                </div>
+
+                <div class="content-box" style="margin-top: 0;">
+                    <h3 class="sub-title">추가 근거 (자원봉사단 활동)</h3>
+                    <p style="font-size: 0.92rem; margin-bottom: 0.7rem;">대구광역시 V-파트너 대학생자원봉사단 부팀장 활동 (2022.04 ~ 2022.12)</p>
+                    <div class="info-pill-list">
+                        <span class="info-pill">일정 조율</span>
+                        <span class="info-pill">역할 분담</span>
+                        <span class="info-pill">팀 단위 커뮤니케이션</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="core-message">
+                "분석한 내용을 혼자 가지고 있지 않고 기록과 공유를 통해 팀의 정보로 만듭니다."
+            </div>
+        </section>
+
+        <!-- TIER 2: 04 / SECURICARE PROJECT -->
+        <section id="project" role="region" aria-label="대표 프로젝트: SecuriCare">
+            <span class="section-tag">04 / PROJECT</span>
+            <h2 class="section-title">SECURICARE 시스템 모의해킹 프로젝트</h2>
+
+            <div class="grid-2">
+                <div class="content-box" style="margin-top: 0;">
+                    <h3 class="sub-title">프로젝트 개요</h3>
+                    <p style="font-size: 0.92rem; margin-bottom: 0.35rem;"><strong>기간:</strong> 2025.11.24 ~ 2025.12.24</p>
+                    <p style="font-size: 0.92rem; margin-bottom: 0.35rem;"><strong>대상:</strong> 가상 병원 Web & Mobile 애플리케이션</p>
+                    <p style="font-size: 0.92rem; margin-bottom: 0.35rem;"><strong>주요 서비스:</strong> 환자 예약, 파일 업로드, 로그인</p>
+                    <p style="font-size: 0.92rem;"><strong>취약점 기준:</strong> <code class="mono-text">OWASP Top 10</code> Web (2025) / Mobile (2024)</p>
+                </div>
+
+                <div class="content-box" style="margin-top: 0;">
+                    <h3 class="sub-title">진행 과정 및 담당 역할</h3>
+                    <p style="font-size: 0.88rem; color: var(--text-sub); margin-bottom: 0.6rem;">
+                        정보 수집 → 취약점 탐색 → 모의해킹 → 대응 방안 구현 → 대응 방안 테스트 → 보고서 작성
+                    </p>
+                    <p style="font-size: 0.92rem;"><strong>담당 역할:</strong> 통합 로그 분석 <code class="mono-text">SIEM</code> 환경 구축, 웹 취약점 진단 및 대응, 최종 결과보고서 구조 설계</p>
+                </div>
+            </div>
+
+            <div class="content-box" style="margin-top: 0.85rem;">
+                <h3 class="sub-title">핵심 수행 내용</h3>
+                <div class="grid-3-cards">
+                    <div class="grid-3-card-item">
+                        <strong>SIEM 구축</strong><br>Web/Mobile/WAF/IDS 로그 통합 (<code class="mono-text">Wazuh + ELK</code>)
+                    </div>
+                    <div class="grid-3-card-item">
+                        <strong>취약점 분석</strong><br><code class="mono-text">Nmap, ZAP Proxy</code> 활용 진단
+                    </div>
+                    <div class="grid-3-card-item">
+                        <strong>대응 및 검증</strong><br><code class="mono-text">ModSecurity</code> Brute-Force 차단 및 Rule 설정
+                    </div>
+                </div>
+            </div>
+
+            <a href="#troubleshooting" class="project-bridge">
+                <div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 0.15rem; letter-spacing: 0.08em; text-transform: uppercase;">NEXT STEP</span>
+                    <span class="bridge-title">SIEM 환경 구축 과정에서 발생한 데이터 매핑 트러블슈팅 사례 확인하기</span>
+                </div>
+                <div class="bridge-action">DATA MAPPING ISSUE →</div>
+            </a>
+        </section>
+
+        <!-- TIER 3: 05 / TROUBLESHOOTING -->
+        <section id="troubleshooting" class="tier-3-section" role="region" aria-label="대표 트러블슈팅">
+            <span class="section-tag">05 / TROUBLESHOOTING</span>
+            <h2 class="section-title">DATA MAPPING ISSUE</h2>
+
+            <p>프로젝트 환경에서 발생한 로그 매핑 이슈를 체계적인 단계로 해결한 트러블슈팅 사례입니다.</p>
+
+            <div class="content-box">
+                <div style="margin-bottom: 0.6rem;"><strong>Problem:</strong> <code class="mono-text">Suricata</code>와 WAF에서 수집된 보안 로그가 <code class="mono-text">Elasticsearch</code>로 전달되었지만 <code class="mono-text">Kibana</code>에서 특정 필드가 누락됨.</div>
+                <div style="margin-bottom: 0.6rem;"><strong>Analysis:</strong> <code class="mono-text">Elasticsearch</code> 인덱스 구조와 로그 필드를 단계적으로 비교·분석.</div>
+                <div style="margin-bottom: 0.6rem;"><strong>Cause:</strong> 로그 데이터 타입과 <code class="mono-text">Elasticsearch Mapping</code> 간 충돌이 발생함.</div>
+                <div style="margin-bottom: 0.6rem;"><strong>Solution:</strong> <code class="mono-text">Filebeat</code> 설정과 로그 수집 <code class="mono-text">Pipeline</code>을 수정하고 데이터 구조를 재정의함.</div>
+                <div><strong>Result:</strong> 새 인덱스에서 로그가 정상적으로 수집되고 <code class="mono-text">Kibana</code> 대시보드 시각화가 복구됨.</div>
+            </div>
+
+            <div class="ts-steps">
+                <div class="ts-step-card">
+                    <div class="ts-label">Step 01</div>
+                    <div class="ts-text">PROBLEM</div>
+                </div>
+                <div class="ts-step-card">
+                    <div class="ts-label">Step 02</div>
+                    <div class="ts-text">ANALYSIS</div>
+                </div>
+                <div class="ts-step-card">
+                    <div class="ts-label">Step 03</div>
+                    <div class="ts-text">CAUSE</div>
+                </div>
+                <div class="ts-step-card">
+                    <div class="ts-label">Step 04</div>
+                    <div class="ts-text">SOLUTION</div>
+                </div>
+                <div class="ts-step-card">
+                    <div class="ts-label">Step 05</div>
+                    <div class="ts-text">RESULT</div>
+                </div>
+            </div>
+
+            <div class="core-message">
+                "현상을 확인하고 원인을 단계적으로 좁혀갑니다."
+            </div>
+        </section>
+
+        <!-- TIER 3: 06 / DISCLOSURE POLICY -->
+        <section id="disclosure" class="tier-3-section" role="region" aria-label="정보 공개 정책 및 목적">
+            <span class="section-tag">06 / INFO</span>
+            <h2 class="section-title">정보 공개 및 비공개 범위 정책</h2>
+            
+            <p class="hero-target-purpose" style="margin-bottom: 1.25rem; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; color: var(--text-main);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" 
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-blue-text); flex-shrink: 0;">
+                  <circle cx="12" cy="12" r="10"/>
+                  <circle cx="12" cy="12" r="6"/>
+                  <circle cx="12" cy="12" r="2"/>
+                </svg>
+                <span><strong>이 페이지는 정보보호 및 IT 기술지원 채용 담당자에게</strong> 나의 보안 실무 역량과 문제 해결 과정을 보여줍니다.</span>
+            </p>
+
+            <p style="color: var(--text-sub);">본 포트폴리오 및 제출 문서에서 관리하는 정보의 투명성 기준입니다.</p>
+
+            <div class="disclosure-grid">
+                <div class="disclosure-box public">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" 
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-mint-text); flex-shrink: 0;">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                          <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        공개 정보 목록 (3가지)
+                    </h3>
+                    <ul>
+                        <li>시스템 보안 전문가 양성 교육과정 수료 및 프로젝트 이력</li>
+                        <li><code class="mono-text">Wazuh, ELK Stack, Suricata</code> 기반 SIEM 구축 및 트러블슈팅 사례</li>
+                        <li>V-파트너 자원봉사단 및 협업 툴킷 활용 의사소통 경험</li>
+                    </ul>
+                </div>
+                <div class="disclosure-box private">
+                    <h3>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" 
+                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #b91c1c; flex-shrink: 0;">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        비공개 정보 목록 (3가지)
+                    </h3>
+                    <ul>
+                        <li>개인 연락처, 실거주지 주소 등 민감한 개인정보</li>
+                        <li>가상 환경 구축에 사용된 내부 테스트용 계정 정보 및 인증 키</li>
+                        <li>외부 보안 유출 방지가 필요한 모의해킹 대상 상세 취약점 상세 코드</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 제출 정보 및 과제 증빙 토글 영역 (C17 실제 결함 수정 전후 항목 추가 완료) -->
+        <div class="meta-toggle-container">
+            <button class="meta-toggle-btn" id="metaToggleBtn" aria-expanded="false" aria-controls="metaContentPanel">
+                <span style="display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" 
+                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-blue-text);">
+                      <circle cx="12" cy="12" r="10"/>
+                      <circle cx="12" cy="12" r="6"/>
+                      <circle cx="12" cy="12" r="2"/>
+                    </svg>
+                    제출 정보 및 과제 증빙 보기
+                </span>
+                <span id="toggleIcon">▼</span>
+            </button>
+            
+            <div class="meta-content-panel" id="metaContentPanel">
+                <div class="meta-inner-grid">
+                    
+                    <div class="meta-block">
+                        <h4>1. 링크 정보</h4>
+                        <ul>
+                            <li><strong>결과물 주소:</strong> <a href="https://joohyung-sec-portfolio.vercel.app" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue-text); text-decoration: none;">https://joohyung-sec-portfolio.vercel.app</a></li>
+                            <li><strong>소스 주소:</strong> <a href="https://github.com/joohyung-bae/security-portfolio" target="_blank" rel="noopener noreferrer" style="color: var(--accent-blue-text); text-decoration: none;">https://github.com/joohyung-bae/security-portfolio</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="meta-block">
+                        <h4>2. 짧은 확인법</h4>
+                        <ul>
+                            <li><strong>어디로 가나요:</strong> 상단 네비게이션 및 각 섹션 (FOCUS, SYSTEM, COMM, PROJECT, TS)</li>
+                            <li><strong>3단계 이내 무엇을 하나요:</strong> 페이지 접속 ➔ 상단 메뉴 클릭 또는 스크롤 ➔ 카드 및 토글 상호작용 확인</li>
+                            <li><strong>통과 모습:</strong> 1366·1920 해상도에서 레이아웃 깨짐 없이 명암비 및 Pretendard 가독성이 유지되는 모습</li>
+                            <li><strong>실패 모습:</strong> 모바일 화면에서 콘텐츠가 넘치거나 인터랙션 반응이 없는 현상</li>
+                        </ul>
+                    </div>
+
+                    <div class="meta-block">
+                        <h4>3. AI와 나의 판단</h4>
+                        <ul>
+                            <li><strong>AI에게 맡긴 일:</strong> Pretendard 폰트 스택 적용, 3단계 섹션 위계 스타일 분리 및 SVG 아이콘 통합</li>
+                            <li><strong>직접 판단한 일:</strong> 보안 실무 서사 및 다크 반전 Hero 섹션과 보조 Tier 3 섹션 간의 시각적 흐름 조율</li>
+                            <li><strong>AI 제안 안 따른 일:</strong> 기본 플로팅 대신 페이지 흐름을 방해하지 않는 하단 토글 구조를 채택하여 과제 증빙 메타정보를 깔끔하게 분리함</li>
+                        </ul>
+                    </div>
+
+                    <div class="meta-block">
+                        <h4>4. 실제 결함 및 수정 내역 (T01-C17 대응)</h4>
+                        <ul>
+                            <li><strong>결함 1 (가독성):</strong> 텍스트 명암비 부족 현상 (<code class="mono-text">#8c827a</code>) ➔ <strong>수정 후:</strong> <code class="mono-text">#635a52</code>로 변경하여 명암비 기준 충족</li>
+                            <li><strong>결함 2 (웹 접근성):</strong> Hero 섹션에 헤딩태그가 없어 h1에서 h3로 건너뛰는 구조 ➔ <strong>수정 후:</strong> Hero 메인 문장을 <code class="mono-text">&lt;h2 class="hero-main-text"&gt;</code>로 승격</li>
+                            <li><strong>결함 3 (레이아웃):</strong> 긴 URL/코드 토큰으로 인한 모바일 가로 스크롤 발생 위험 ➔ <strong>수정 후:</strong> <code class="mono-text">overflow-wrap: break-word</code> 및 안전장치 추가</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer>
+            <div>© BAE JOOHYUNG. All rights reserved. | Security Portfolio & Workflow</div>
+        </footer>
+
+    </div>
+
+    <!-- 토글 인터랙션 제어 스크립트 -->
+    <script>
+        const toggleBtn = document.getElementById('metaToggleBtn');
+        const contentPanel = document.getElementById('metaContentPanel');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        toggleBtn.addEventListener('click', function() {
+            const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                toggleBtn.setAttribute('aria-expanded', 'false');
+                contentPanel.classList.remove('expanded');
+                toggleIcon.textContent = '▼';
+            } else {
+                toggleBtn.setAttribute('aria-expanded', 'true');
+                contentPanel.classList.add('expanded');
+                toggleIcon.textContent = '▲';
+            }
+        });
+    </script>
+</body>
+</html>
